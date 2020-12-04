@@ -1,5 +1,7 @@
 import { FETCHING_DATA, FETCHING_FAILED, FETCHING_SUCCESS } from './index';
 
+/** Those are the actions types that will be dispatched to the reducer
+ ** using the dispatch function placed on CharactersContainer component */
 export const fetchingData = () => {
   return {
     type: FETCHING_DATA,
