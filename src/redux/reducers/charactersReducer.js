@@ -1,3 +1,5 @@
+import { FETCHING_DATA, FETCHING_FAILED, FETCHING_SUCCESS } from '../actions';
+
 const initialState = {
   loading: false,
   data: [],

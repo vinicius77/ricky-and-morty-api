@@ -1,21 +1,19 @@
-const FETCHING_DATA = 'FETCHING_DATA';
-const FETCHING_FAILED = 'FETCHING_FAILED';
-const FETCHING_SUCCESS = 'FETCHING_SUCCESS';
+import { FETCHING_DATA, FETCHING_FAILED, FETCHING_SUCCESS } from './index';
 
-export default fetchingData = () => {
+export const fetchingData = () => {
   return {
     type: FETCHING_DATA,
   };
 };
 
-export default fetchingFailed = (error) => {
+export const fetchingFailed = (error) => {
   return {
     type: FETCHING_FAILED,
     payload: error,
   };
 };
 
-export default fetchingSuccess = (characters) => {
+export const fetchingSuccess = (characters) => {
   return {
     type: FETCHING_SUCCESS,
     payload: characters,
