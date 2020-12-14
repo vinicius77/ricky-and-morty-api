@@ -20,7 +20,8 @@ const Character = ({ character }) => {
             {status}
           </p>
           <p>
-            Type: <span>{type ? type : 'Unknown'}</span>
+            <span>Type: </span>
+            {type ? type : 'Unknown'}
           </p>
           <p>
             <span>Specie(s): </span>

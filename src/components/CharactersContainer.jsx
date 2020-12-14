@@ -30,51 +30,55 @@ const CharactersContainer = ({
   };
 
   useEffect(() => {
-    fetchData();
+    const source = axios.CancelToken.source();
+    const cancelToken = source.token;
 
-    let cancel;
+    fetchData();
 
     axios
       .get(currentPage, {
-        cancelToken: new axios.CancelToken((ctoken) => (cancel = ctoken)),
+        cancelToken,
+        headers: { 'Content-Type': 'application/json' },
       })
-      .then((response) => {
-        fetchSuccess(response.data.results);
-        setPreviousPage(response.data.info.prev);
-        setNextPage(response.data.info.next);
+      .then(({ data }) => {
+        fetchSuccess(data.results);
+        setPreviousPage(data.info.prev);
+        setNextPage(data.info.next);
       })
       .catch((error) => fetchFailed(error.message));
 
-    return () => cancel();
+    return () => source.cancel;
   }, [currentPage, fetchData, fetchSuccess, fetchFailed]);
 
   return (
     <section className="characters-section">
-      <h1>Ricky and Morty Characters</h1>
-      {!characters.loading && (
-        <Paginator
-          goToThePreviousPage={previousPage ? goToThePreviousPage : null}
-          goToTheNextPage={nextPage ? goToTheNextPage : null}
-        />
-      )}
-      {characters.loading && !characters.error && <div>Loading ...</div>}
+      <div className="max-width">
+        <h1>Ricky and Morty Characters</h1>
+        {!characters.loading && (
+          <Paginator
+            goToThePreviousPage={previousPage ? goToThePreviousPage : null}
+            goToTheNextPage={nextPage ? goToTheNextPage : null}
+          />
+        )}
+        {characters.loading && !characters.error && <div>Loading ...</div>}
 
-      {characters.error && <div>{characters.error}</div>}
+        {characters.error && <div>{characters.error}</div>}
 
-      <ul className="characters-list">
-        {characters.data.map((character) => (
-          <li key={character.id}>
-            <Character character={character} />
-          </li>
-        ))}
-      </ul>
+        <ul className="characters-list">
+          {characters.data.map((character) => (
+            <li key={character.id}>
+              <Character character={character} />
+            </li>
+          ))}
+        </ul>
 
-      {!characters.loading && !characters.error && (
-        <Paginator
-          goToThePreviousPage={previousPage ? goToThePreviousPage : null}
-          goToTheNextPage={nextPage ? goToTheNextPage : null}
-        />
-      )}
+        {!characters.loading && !characters.error && (
+          <Paginator
+            goToThePreviousPage={previousPage ? goToThePreviousPage : null}
+            goToTheNextPage={nextPage ? goToTheNextPage : null}
+          />
+        )}
+      </div>
     </section>
   );
 };
@@ -101,6 +105,8 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
+/** connect() connects both the state and dispatch functions
+ * previously mapped to props into the React compnonent */
 export default connect(
   mapStateToProps,
   mapDispatchToProps
